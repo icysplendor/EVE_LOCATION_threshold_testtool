@@ -1,7 +1,7 @@
 name: Build Threshold Tuner Tool
 
 on:
-  workflow_dispatch:  # 允许手动点击触发
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
   build:
@@ -18,13 +18,14 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # 安装运行 tuner.py 所需的库
-        pip install PyQt6 opencv-python numpy mss pyinstaller
+        pip install -r requirements_tuner.txt
 
     - name: Build Tuner EXE
       run: |
-        # 打包成单文件 EXE，不显示控制台黑框 (--noconsole)
-        pyinstaller --onefile --noconsole --name "Threshold_Tuner" tuner.py
+        # 打包成单文件 EXE，无控制台黑框
+        # --clean: 清理缓存
+        # --windowed: 无控制台
+        pyinstaller --clean --onefile --windowed --name "Threshold_Tuner" tuner.py
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
